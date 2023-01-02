@@ -47,6 +47,9 @@ function List() {
     if (searchvalue) {
         filteredFilms = filteredFilms.filter(o => o.title.toLowerCase().includes(searchvalue.toLowerCase()));
         const filteredFilmIds = filteredFilms.map(o => o.episode_id)
+        if(selectedEpisode && !filteredFilmIds.includes(selectedEpisode.episode_id)){
+            setSelectedEpisode(null);
+        }
     }
     if(sortBy) {
         filteredFilms = filteredFilms.sort((a, b) => {
