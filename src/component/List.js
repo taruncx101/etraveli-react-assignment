@@ -6,6 +6,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 
 function List() {
+    const [loading, setLoading]= useState(false);
     const [tableData, setTableData] = useState([]);
     const [selectedEpisode, setSelectedEpisode] = useState(null);
     const [searchvalue, setSearchValue] = useState("");
@@ -16,7 +17,9 @@ function List() {
     }, [])
     const fetchFilmData = async () => {
         const url = "https://swapi.dev/api/films/?format=json";
+        setLoading(true)
         const resp = await fetch(url);
+        setLoading(false)
         let newResp = await resp.json();
         let data = newResp?.results || []
         data = data.map((item) => {
@@ -67,7 +70,7 @@ function List() {
             {tableData && tableData.length ?
                 <Row>
                     <Row>
-                        <Col sm={2}>
+                        <Col sm={1}>
                             <DropdownButton title="Sort By" variant='secondary'>
                                 <Dropdown.Item eventKey="1" onClick={()=>setSortBy("episode")} active={sortBy == 'episode'}>Episode</Dropdown.Item>
                                 <Dropdown.Item eventKey="2" onClick={() =>setSortBy("year")} active={sortBy == 'year'}>Year</Dropdown.Item>
@@ -110,7 +113,7 @@ function List() {
 
 
                 </Row> :
-                <Row ><Col className="float-center">Loading Episodes...</Col> </Row>
+                <Row ><Col className="float-center">{loading ? 'Loading Episodes...' : 'No Episode Found!!'}</Col> </Row>
 
             }
 
