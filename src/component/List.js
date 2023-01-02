@@ -26,9 +26,7 @@ function List() {
             item.roman_id = toRoman(item.episode_id);
             return item;
         })
-
         setTableData(data)
-        console.log(data)
     }
 
 
