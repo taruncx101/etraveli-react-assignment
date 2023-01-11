@@ -3,12 +3,13 @@ import { Container, Row, Col, InputGroup, Form, DropdownButton, Dropdown } from 
 import EpisodeDetail from './EpisodeDetail';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { connect } from "react-redux";
+import { setSelectedEpisode, setAllEpisodes } from "../redux/actions/episodes";
 
 
-function List() {
+function List(props) {
+    const {episodes, setAllEpisodes, setSelectedEpisode} = props;
     const [loading, setLoading]= useState(false);
-    const [tableData, setTableData] = useState([]);
-    const [selectedEpisode, setSelectedEpisode] = useState(null);
     const [searchvalue, setSearchValue] = useState("");
     const [sortBy, setSortBy] = useState("episode");
 
@@ -26,7 +27,7 @@ function List() {
             item.roman_id = toRoman(item.episode_id);
             return item;
         })
-        setTableData(data)
+        setAllEpisodes(data);
     }
 
 
@@ -43,7 +44,8 @@ function List() {
             }
         }
     }
-    let filteredFilms = [...tableData];
+    let filteredFilms = [...episodes.episodeList];
+    const selectedEpisode = episodes.selectedEpisode;
 
     if (searchvalue) {
         filteredFilms = filteredFilms.filter(o => o.title.toLowerCase().includes(searchvalue.toLowerCase()));
@@ -65,13 +67,13 @@ function List() {
     return (
         <Container className='main-container'>
 
-            {tableData && tableData.length ?
+            {filteredFilms && filteredFilms.length ?
                 <Row>
                     <Row>
                         <Col sm={1}>
                             <DropdownButton title="Sort By" variant='secondary'>
-                                <Dropdown.Item eventKey="1" onClick={()=>setSortBy("episode")} active={sortBy == 'episode'}>Episode</Dropdown.Item>
-                                <Dropdown.Item eventKey="2" onClick={() =>setSortBy("year")} active={sortBy == 'year'}>Year</Dropdown.Item>
+                                <Dropdown.Item eventKey="1" onClick={()=>setSortBy("episode")} active={sortBy === 'episode'}>Episode</Dropdown.Item>
+                                <Dropdown.Item eventKey="2" onClick={() =>setSortBy("year")} active={sortBy === 'year'}>Year</Dropdown.Item>
                             </DropdownButton>
                         </Col>
                         <Col>
@@ -121,4 +123,15 @@ function List() {
     )
 }
 
-export default List;
+const mapStateToProps = state => {
+    const { episodes } = state;
+    return { episodes };
+  };
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      setAllEpisodes: (episodes) => dispatch(setAllEpisodes(episodes)),
+      setSelectedEpisode: (episode = null) => dispatch(setSelectedEpisode(episode)),
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(List);
