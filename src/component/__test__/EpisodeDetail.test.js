@@ -1,12 +1,10 @@
-import renderer from 'react-test-renderer';
+import { render, screen } from '@testing-library/react';
 import EpisodeDetail from '../EpisodeDetail';
 
-
-it('render without crashing', () => {
-  const component = renderer.create(
-    <EpisodeDetail selectedEpisode={null}/>,
-  );
-  let tree = component.toJSON();
-  expect(tree).toMatchSnapshot();
-
+it('renders initial loading message', () => {
+    render(<EpisodeDetail selectedEpisode={null}/>);
+    const element = screen.getByText('No Movie Selected')
+    expect(element).toBeInTheDocument();
 });
+
+

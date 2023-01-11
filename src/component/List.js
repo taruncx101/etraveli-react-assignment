@@ -111,7 +111,7 @@ function List() {
 
 
                 </Row> :
-                <Row ><Col className="float-center">{loading ? 'Loading Episodes...' : 'No Episode Found!!'}</Col> </Row>
+                <Row ><Col className="float-center"><h2>{loading ? 'Loading Episodes...' : 'No Episode Found!!'}</h2></Col> </Row>
 
             }
 
